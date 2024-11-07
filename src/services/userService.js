@@ -1,9 +1,39 @@
 import { createUser, findUser, getUserProfileById } from "../repositories/userRepository.js"
 import AppError from "../utils/appError.js";
 import BadRequestError from "../utils/badRequestError.js";
+import InternalServerError from "../utils/internalServerError.js";
 import NotFoundError from "../utils/notFoundError.js";
+import cloudinary from "cloudinary";
+import fs from "fs/promises";
 
-const registerUser = async (userDetails) => {
+
+const registerUser = async (userDetails, image) => {
+    console.log("UserDetails", userDetails);
+    
+
+    const imagePath = image;
+    if(imagePath){        
+        try {
+            const cloudinaryResponse = await cloudinary.v2.uploader.upload(imagePath?.path, {
+                folder: 'lms', // Save files in a folder named lms
+                width: 250,
+                height: 250,
+                gravity: 'faces', // This option tells cloudinary to center the image around detected faces (if any) after cropping or resizing the original image
+                crop: 'fill',
+            });
+
+            if(cloudinaryResponse){
+                var public_id = cloudinaryResponse.public_id;
+                var secure_url = cloudinaryResponse.secure_url;
+
+                // Remove file from server
+                await fs.rm(`uploads/${imagePath.filename}`)
+            }
+        } catch (error) {
+            throw new InternalServerError();
+        }
+    }
+
 
     // 1. we need to check if the user with this email already exists or not
     const user = await findUser({
@@ -22,8 +52,8 @@ const registerUser = async (userDetails) => {
         email: userDetails.email,
         password: userDetails.password,
         avatar : {
-            public_id: userDetails.email,
-            secure_url: 'https://res.cloudinary.com/du9jzqlpt/image/upload/v1674647316/avatar_drzgxv.jpg',
+            public_id: public_id,
+            secure_url: secure_url,
         }
     });
 

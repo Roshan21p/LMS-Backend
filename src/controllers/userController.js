@@ -3,7 +3,7 @@ import AppError from "../utils/appError.js";
 
 const register = async (req, res) => {
     try {
-        const response = await registerUser(req.body);
+        const response = await registerUser(req.body, req.file);
         return res.status(201).json({
             success: true,
             message: "User registered Successfully",

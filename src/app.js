@@ -1,11 +1,11 @@
 import express  from 'express';
-import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+dotenv.config();
+import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import userRouter from './routes/userRoute.js';
 import authRouter from './routes/authRoute.js';
 import errorMiddleware from './middlewares/errorMiddleware.js';
-dotenv.config();
 
 const app = express();
 
