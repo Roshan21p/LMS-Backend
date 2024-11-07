@@ -21,7 +21,7 @@ const createUser = async (userDetails) => {
 
 const findUser = async (parameters) => {
     try {
-        const response = await User.findOne({...parameters});
+        const response = await User.findOne({...parameters}).select('+password');
         return response;
     } catch (error) {
         console.log(error);

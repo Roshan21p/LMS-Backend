@@ -16,7 +16,8 @@ const registerUser = async (userDetails) => {
 
     //2.If not then create the user in the database
     const newUser = await createUser({
-        fullName: userDetails.fullName,
+        firstName: userDetails.firstName,
+        lastName: userDetails.lastName,
         email: userDetails.email,
         password: userDetails.password,
         avatar : {

@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import userRouter from './routes/userRoute.js';
+import authRouter from './routes/authRoute.js';
 dotenv.config();
 
 const app = express();
@@ -17,7 +18,8 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 
 // Routing middleware
-app.use('/api/v1/users', userRouter)
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/auth', authRouter);
 
 app.use('/ping', function(req, res){
     res.send('Pong');

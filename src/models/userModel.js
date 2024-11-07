@@ -1,14 +1,24 @@
 import { Schema, model } from "mongoose";
+import bcrypt from 'bcryptjs';
 
 const userSchema = new Schema(
     {
-        fullName: {
-            type: String,
-            required: [true, "Name is required"],
-            minlength: [5, "Name must be at least 5 characters"],
-            maxlength: [30, "Name should be at less than 30 characters"],
-            trim: true,
-        },
+      firstName: {
+        type: String,
+        required: [true, "First Name is required"],
+        minlength: [5, "First name must be atleast 5 character long"],
+        lowercase: true,
+        trim: true, // if the user gives extra spaces then it will automatically remove it
+        maxlength: [20, "First name should be less than or equal to 20 characters"]
+    },
+
+    lastName: {
+        type: String,
+        minlength: [5, "Last name must be atleast 5 character long"],
+        lowercase: true,
+        trim: true, // if the user gives extra spaces then it will automatically remove it
+        maxlength: [20, "Last name should be less than or equal to 20 characters"]
+    },
         email: {
             type: String,
             required: [true, 'Email is required'],
@@ -47,6 +57,11 @@ const userSchema = new Schema(
 }, {
     timestamps: true,
 });
+
+// Hashes password before saving to the database
+userSchema.pre('save', async function(){
+  this.password = await bcrypt.hash(this.password, 10);
+})
 
 const User = model('User', userSchema);
 
