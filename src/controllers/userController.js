@@ -1,4 +1,4 @@
-import { registerUser } from "../services/userService.js";
+import { getUserProfile, registerUser } from "../services/userService.js";
 import AppError from "../utils/appError.js";
 
 const register = async (req, res) => {
@@ -10,7 +10,7 @@ const register = async (req, res) => {
             data: response,
             error: {},
         })
-    } catch (error) {
+    } catch (error) {        
         if(error instanceof AppError){
             return  res.status(error.statusCode).json({
                 success: false,
@@ -31,6 +31,22 @@ const register = async (req, res) => {
 
 
 
+const getProfile = async (req, res) => {
+    
+    try {
+        const response = await getUserProfile(req.user.id);
+        return res.status(200).json({
+            success: true,
+            message: "Profile details fetched Successfully",
+            data: response,
+            error: {},
+        })
+    } catch (error) {
+       throw new AppError("Failed to fectch profile details",404);
+    }
+};
+
 export {
-    register
+    register,
+    getProfile,
 }

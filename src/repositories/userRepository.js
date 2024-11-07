@@ -7,14 +7,13 @@ const createUser = async (userDetails) => {
         const response = await User.create(userDetails);
         return response;
     } catch (error) {
-        if(error.name === 'ValidationError') {
-
+        if(error.name === "ValidationError") {
             const errorMessageList = Object.keys(error.errors).map((property) => {
                 return error.errors[property].message;
             });
             console.log(errorMessageList)
             throw new BadRequestError(errorMessageList);
-        } 
+        }        
         throw new InternalServerError(); 
     }
 };
@@ -29,7 +28,17 @@ const findUser = async (parameters) => {
     }
 }
 
+const getUserProfileById = async (userId) => {
+    try {
+        const response = await User.findById(userId);        
+        return response;
+    } catch (error) {
+        throw new InternalServerError(); 
+    }
+}
+
 export {
     createUser,
     findUser,
+    getUserProfileById,
 }

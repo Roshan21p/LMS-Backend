@@ -1,6 +1,7 @@
-import { createUser, findUser } from "../repositories/userRepository.js"
+import { createUser, findUser, getUserProfileById } from "../repositories/userRepository.js"
 import AppError from "../utils/appError.js";
 import BadRequestError from "../utils/badRequestError.js";
+import NotFoundError from "../utils/notFoundError.js";
 
 const registerUser = async (userDetails) => {
 
@@ -38,6 +39,15 @@ const registerUser = async (userDetails) => {
      return newUser;
 }
 
+const getUserProfile = async (userId) => {
+    const response = await getUserProfileById(userId);    
+    if(!response) {
+        throw new NotFoundError('User profile details');
+    }
+    return response;
+}
+
 export {
     registerUser,
+    getUserProfile,
 }
