@@ -37,8 +37,21 @@ const getUserProfileById = async (userId) => {
     }
 }
 
+const checkPasswordToken = async (forgotPasswordToken) => {
+    try {
+       const response = await User.findOne({
+        forgotPasswordToken,
+        forgotPasswordExpiry: { $gt: Date.now() },
+       })
+       return response;
+    } catch (error) {
+        throw new InternalServerError();
+    }
+}
+
 export {
     createUser,
     findUser,
     getUserProfileById,
+    checkPasswordToken,
 }

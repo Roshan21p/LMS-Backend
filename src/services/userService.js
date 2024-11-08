@@ -1,10 +1,13 @@
-import { createUser, findUser, getUserProfileById } from "../repositories/userRepository.js"
+import User from "../models/userModel.js";
+import { checkPasswordToken, createUser, findUser, getUserProfileById } from "../repositories/userRepository.js"
 import AppError from "../utils/appError.js";
 import BadRequestError from "../utils/badRequestError.js";
 import InternalServerError from "../utils/internalServerError.js";
 import NotFoundError from "../utils/notFoundError.js";
 import cloudinary from "cloudinary";
 import fs from "fs/promises";
+import sendEmail from "../utils/sendEmail.js";
+import crypto from "crypto";
 
 
 const registerUser = async (userDetails, image) => {
@@ -77,7 +80,68 @@ const getUserProfile = async (userId) => {
     return response;
 }
 
+const getForgotPassword = async (email) => {
+    if(!email){
+        throw new BadRequestError('email is required');
+    }
+
+    const user = await User.findOne({ email });    
+
+    if(!user){
+        throw new BadRequestError('email is not registered'); 
+    }
+
+    // Generating the reset token via the method we have in user model
+    const resetToken = await user.generatePasswordResetToken();    
+
+    const resetPasswordUrl = `${process.env.FRONTEND_URL}/resetPassword/${resetToken}`;
+    
+    const subject = 'Reset Password';
+    const message = `You can reset your password by clicking <a href=${resetPasswordUrl} target="_blank">Reset your password</a>\nIf the above link does not work for some reason then copy paste this link in new tab ${resetPasswordUrl}.\n If you have not requested this, kindly ignore.`;
+
+    try {
+        await sendEmail(email, subject, message);        
+    } catch (error) {
+         // If some error happened we need to clear the forgotPassword* fields in our DB         
+        user.forgotPasswordToken = undefined;
+        user.forgotPasswordExpiry = undefined;
+        throw new InternalServerError();
+    }
+    await user.save();
+}
+
+const setResetPassword = async (resetToken, newPassword) => {
+    
+    if(!newPassword){
+        throw new BadRequestError("Password is required")
+    }
+    // We are again hashing the resetToken using sha256 since we have stored our resetToken in DB using the same algorithm
+    const forgotPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+    console.log("resetToken for", forgotPasswordToken);
+
+    const user = await checkPasswordToken(forgotPasswordToken);    
+
+    if(!user){        
+        throw new BadRequestError('Token is invalid or expired, please try again');
+    }
+
+    user.password = newPassword;
+
+    // making forgotPassword* valus undefined in the DB
+    user.forgotPasswordExpiry = undefined;
+    user.forgotPasswordToken = undefined;
+
+   // Saving the updated user values
+   await user.save();
+}
+
 export {
     registerUser,
     getUserProfile,
+    getForgotPassword,
+    setResetPassword,
 }
