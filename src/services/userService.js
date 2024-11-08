@@ -163,10 +163,62 @@ const setPassword = async (userDetails, userId) => {
 
     await user.save();
 }
+
+const updateUserProfile = async (userDetails) => {
+
+    const { firstName, lastName} = userDetails.body;    
+
+    const user = await findUserById(userDetails.user.id);
+    
+    if(!user){
+        throw new BadRequestError("user does not exist or invalid user id");
+    }
+
+    if(firstName){
+        user.firstName = firstName;
+    } 
+
+    if(lastName){
+        user.lastName = lastName;
+    }
+
+    if(userDetails.file){
+        try {
+            // Deletes the old image uploaded by the user
+            await cloudinary.v2.uploader.destroy(user.avatar?.public_id);
+
+            const imagePath = userDetails.file;            
+
+            const cloudinaryResponse =  await cloudinary.v2.uploader.upload(imagePath?.path, {
+                folder: 'lms', // Save files in a folder named lms
+                width: 250,
+                height: 250,
+                gravity: 'faces', // This option tells cloudinary to center the image around detected faces (if any) after cropping or resizing the original image
+                crop: 'fill',
+            });            
+
+            if(cloudinaryResponse){
+                user.avatar.public_id = cloudinaryResponse.public_id;
+                user.avatar.secure_url = cloudinaryResponse.secure_url;
+
+                // Remove file from server
+                await fs.rm(`uploads/${imagePath.filename}`)
+            }
+        } catch (error) {
+            throw new InternalServerError();
+        }
+    }
+    await user.save();
+    user.password = undefined; 
+           
+    return user;
+}
+
 export {
     registerUser,
     getUserProfile,
     getForgotPassword,
     setPasswordByToken,
     setPassword,
+    updateUserProfile,
 }
