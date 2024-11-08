@@ -1,5 +1,4 @@
 import loginUser from "../services/authService.js";
-import AppError from "../utils/appError.js";
 
 const login = async (req, res) => {
     try {
@@ -37,7 +36,7 @@ const logout = (req, res) => {
         httpOnly: true,
         secure: process.env.COOKIE_SECURE, 
         sameSite: "None",
-         maxAge: 7 * 24 * 60 * 60 * 1000
+         maxAge: Date.now() + 24 * 60 * 60 * 1000
     });
 
     res.status(200).json({

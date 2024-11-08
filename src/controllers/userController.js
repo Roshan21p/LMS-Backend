@@ -1,4 +1,4 @@
-import { getForgotPassword, getUserProfile, registerUser, setResetPassword } from "../services/userService.js";
+import { getForgotPassword, getUserProfile, registerUser, setPassword, setPasswordByToken } from "../services/userService.js";
 import AppError from "../utils/appError.js";
 
 const register = async (req, res) => {
@@ -86,14 +86,41 @@ const resetPassword = async (req, res) => {
       try {
         const { resetToken } = req.params;
         const { password } = req.body
-        await setResetPassword(resetToken, password);
+        await setPasswordByToken(resetToken, password);
 
         return res.status(200).json({
             success: true,
             message: `Password changed successfully`,
         })
       } catch (error) {
-        console.log(error);
+        if(error instanceof AppError){
+            return  res.status(error.statusCode).json({
+                success: false,
+                message: error.message,
+                data: {},
+                error: error,
+            });
+        }
+         const statusCode = error.statusCode || 500;
+        return res.status(statusCode).json({
+            success: false,
+            message: error.message,
+            data: {},
+            error: error,
+
+        });
+      }  
+}
+
+const changePassword = async (req, res) => {
+    try {
+        await setPassword(req.body, req.user.id);
+
+        return res.status(200).json({
+            success: true,
+            message: `Password changed successfully`,
+        })
+      } catch (error) {
 
         if(error instanceof AppError){
             return  res.status(error.statusCode).json({
@@ -119,4 +146,5 @@ export {
     getProfile,
     forgotPassword,
     resetPassword,
+    changePassword,
 }

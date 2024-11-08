@@ -1,5 +1,5 @@
 import User from "../models/userModel.js";
-import { checkPasswordToken, createUser, findUser, getUserProfileById } from "../repositories/userRepository.js"
+import { checkTokenPassword, createUser, findUser, findUserById, getUserProfileById } from "../repositories/userRepository.js"
 import AppError from "../utils/appError.js";
 import BadRequestError from "../utils/badRequestError.js";
 import InternalServerError from "../utils/internalServerError.js";
@@ -8,6 +8,7 @@ import cloudinary from "cloudinary";
 import fs from "fs/promises";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
+import bcrypt from 'bcryptjs';
 
 
 const registerUser = async (userDetails, image) => {
@@ -110,7 +111,7 @@ const getForgotPassword = async (email) => {
     await user.save();
 }
 
-const setResetPassword = async (resetToken, newPassword) => {
+const setPasswordByToken = async (resetToken, newPassword) => {
     
     if(!newPassword){
         throw new BadRequestError("Password is required")
@@ -123,7 +124,7 @@ const setResetPassword = async (resetToken, newPassword) => {
 
     console.log("resetToken for", forgotPasswordToken);
 
-    const user = await checkPasswordToken(forgotPasswordToken);    
+    const user = await checkTokenPassword(forgotPasswordToken);    
 
     if(!user){        
         throw new BadRequestError('Token is invalid or expired, please try again');
@@ -139,9 +140,33 @@ const setResetPassword = async (resetToken, newPassword) => {
    await user.save();
 }
 
+const setPassword = async (userDetails, userId) => {
+    const {oldPassword, newPassword} = userDetails;    
+
+    if(!oldPassword && newPassword){
+        throw new BadRequestError(" Old password and new password are required");
+    }
+
+    const user = await findUserById(userId);
+
+    if(!user){
+        throw new BadRequestError("user does not exist or invalid user id");
+    }
+
+    const isPasswordValided = await bcrypt.compare(oldPassword, user.password);
+
+    if(!isPasswordValided){
+        throw new BadRequestError("Old password is inavlid");
+    }
+
+    user.password = newPassword;
+
+    await user.save();
+}
 export {
     registerUser,
     getUserProfile,
     getForgotPassword,
-    setResetPassword,
+    setPasswordByToken,
+    setPassword,
 }

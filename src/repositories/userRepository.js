@@ -37,7 +37,7 @@ const getUserProfileById = async (userId) => {
     }
 }
 
-const checkPasswordToken = async (forgotPasswordToken) => {
+const checkTokenPassword = async (forgotPasswordToken) => {
     try {
        const response = await User.findOne({
         forgotPasswordToken,
@@ -49,9 +49,19 @@ const checkPasswordToken = async (forgotPasswordToken) => {
     }
 }
 
+const findUserById = async (userId) => {
+    try {
+        const response = await User.findById(userId).select('+password')
+        return response;
+    } catch (error) {
+        throw new InternalServerError();
+    }
+}
+
 export {
     createUser,
     findUser,
     getUserProfileById,
-    checkPasswordToken,
+    checkTokenPassword,
+    findUserById,
 }
