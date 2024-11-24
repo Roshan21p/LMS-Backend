@@ -18,8 +18,7 @@ import NotFoundError from '../utils/notFoundError.js';
 import sendEmail from '../utils/sendEmail.js';
 
 const registerUser = async (userDetails, image) => {
-  console.log('UserDetails', userDetails);
-
+  
   const imagePath = image;
   if (imagePath) {
     try {
@@ -43,8 +42,7 @@ const registerUser = async (userDetails, image) => {
       }
     } catch (error) {
       console.log(error);
-
-      throw new InternalServerError();
+      throw new InternalServerError('Image is not uploaded, please try again');
     }
   }
 
@@ -199,10 +197,10 @@ const updateUserProfile = async (userDetails) => {
       const cloudinaryResponse = await cloudinary.v2.uploader.upload(
         imagePath?.path,
         {
-          folder: 'lms', // Save files in a folder named lms
+          folder: 'lms',
           width: 250,
           height: 250,
-          gravity: 'faces', // This option tells cloudinary to center the image around detected faces (if any) after cropping or resizing the original image
+          gravity: 'faces',
           crop: 'fill'
         }
       );
@@ -216,7 +214,7 @@ const updateUserProfile = async (userDetails) => {
       }
     } catch (error) {
       console.log(error);
-      throw new InternalServerError();
+      throw new InternalServerError('Image is not uploaded, please try again');
     }
   }
   await user.save();

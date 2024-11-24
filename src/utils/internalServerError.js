@@ -1,8 +1,10 @@
 import AppError from './appError.js';
 
 class InternalServerError extends AppError {
-  constructor() {
-    super("It's not you it's our server where something went wrong", 500);
+  constructor(message) {
+    const error =
+      message || "It's not you, it's our server where something went wrong";
+    super(error, 500);
   }
 }
 
