@@ -6,6 +6,7 @@ import morgan from 'morgan';
 
 import errorMiddleware from './middlewares/errorMiddleware.js';
 import authRouter from './routes/authRoute.js';
+import courseRouter from './routes/courseRoute.js';
 import userRouter from './routes/userRoute.js';
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(cookieParser());
 // Routing middleware
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/courses', courseRouter);
 
 app.use('/ping', function (req, res) {
   res.send('Pong');

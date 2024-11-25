@@ -14,7 +14,7 @@ const courseSchema = new Schema(
       required: [true, 'Description is required']
     },
     category: {
-      type: true,
+      type: String,
       required: [true, 'Category is required']
     },
     lectures: [
