@@ -1,6 +1,7 @@
 import {
   addLectureToCourse,
   findAllCourses,
+  listOfLecturesByCourseId,
   processCourseCreation
 } from '../services/courseService.js';
 import AppError from '../utils/appError.js';
@@ -46,7 +47,7 @@ const addLectureToCourseById = async (req, res) => {
     const response = await addLectureToCourse(req.body, req.file, id);
     return res
       .status(200)
-      .json(successResponse(response, 'Course lecture added successfully'));
+      .json(successResponse(response, 'Course lectures added successfully'));
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
@@ -57,4 +58,26 @@ const addLectureToCourseById = async (req, res) => {
   }
 };
 
-export { addLectureToCourseById, createCourse, getAllCourses };
+const getLecturesByCourseId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await listOfLecturesByCourseId(id);
+    return res
+      .status(200)
+      .json(successResponse(response, 'Course lecture fetched successfully'));
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json(customErrorResponse(error));
+    }
+    console.log('con', error);
+
+    return res.status(500).json(InternalServerError(error));
+  }
+};
+
+export {
+  addLectureToCourseById,
+  createCourse,
+  getAllCourses,
+  getLecturesByCourseId
+};

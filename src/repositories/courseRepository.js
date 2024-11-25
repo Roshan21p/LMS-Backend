@@ -18,7 +18,7 @@ const saveCourse = async (courseData) => {
   }
 };
 
-const updateCourseWithLectureId = async (courseId) => {
+const findCourseWithCourseId = async (courseId) => {
   try {
     const response = await Course.findById(courseId);
     return response;
@@ -28,4 +28,4 @@ const updateCourseWithLectureId = async (courseId) => {
   }
 };
 
-export { saveCourse, updateCourseWithLectureId };
+export { saveCourse, findCourseWithCourseId };

@@ -3,7 +3,8 @@ import { Router } from 'express';
 import {
   addLectureToCourseById,
   createCourse,
-  getAllCourses
+  getAllCourses,
+  getLecturesByCourseId
 } from '../controllers/courseController.js';
 import { authorizeRoles, isLoggedIn } from '../middlewares/authMiddleware.js';
 import upload from '../middlewares/multerMiddleware.js';
@@ -22,6 +23,7 @@ courseRouter
 
 courseRouter
   .route('/:id')
+  .get(isLoggedIn, getLecturesByCourseId)
   .post(
     isLoggedIn,
     authorizeRoles('ADMIN'),

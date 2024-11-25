@@ -4,8 +4,8 @@ import path from 'path';
 
 import Course from '../models/courseModel.js';
 import {
-  saveCourse,
-  updateCourseWithLectureId
+  findCourseWithCourseId,
+  saveCourse
 } from '../repositories/courseRepository.js';
 import BadRequestError from '../utils/badRequestError.js';
 import InternalServerError from '../utils/internalServerError.js';
@@ -64,7 +64,6 @@ const findAllCourses = async () => {
 
 const addLectureToCourse = async (lectureDetails, lectureVideo, courseId) => {
   const { title, description } = lectureDetails;
-  console.log(lectureVideo);
 
   let lectureData = {};
 
@@ -72,7 +71,7 @@ const addLectureToCourse = async (lectureDetails, lectureVideo, courseId) => {
     throw new BadRequestError('Both title and description are required');
   }
 
-  const course = await updateCourseWithLectureId(courseId);
+  const course = await findCourseWithCourseId(courseId);
 
   if (!course) {
     throw new NotFoundError(
@@ -114,4 +113,19 @@ const addLectureToCourse = async (lectureDetails, lectureVideo, courseId) => {
   return course;
 };
 
-export { addLectureToCourse, findAllCourses, processCourseCreation };
+const listOfLecturesByCourseId = async (courseId) => {
+  const course = await findCourseWithCourseId(courseId);
+
+  if (!course) {
+    throw new NotFoundError('Invalid course id or course not found.');
+  }
+
+  return course.lectures;
+};
+
+export {
+  addLectureToCourse,
+  findAllCourses,
+  processCourseCreation,
+  listOfLecturesByCourseId
+};
