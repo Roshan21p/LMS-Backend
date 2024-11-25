@@ -18,7 +18,6 @@ import NotFoundError from '../utils/notFoundError.js';
 import sendEmail from '../utils/sendEmail.js';
 
 const registerUser = async (userDetails, image) => {
-  
   const imagePath = image;
   if (imagePath) {
     try {
