@@ -2,10 +2,10 @@ import cloudinary from 'cloudinary';
 import fs from 'fs/promises';
 import path from 'path';
 
+import Course from '../models/courseModel.js';
 import { saveCourse } from '../repositories/courseRepository.js';
 import BadRequestError from '../utils/badRequestError.js';
 import InternalServerError from '../utils/internalServerError.js';
-import Course from '../models/courseModel.js';
 import NotFoundError from '../utils/notFoundError.js';
 
 const processCourseCreation = async (courseData, image) => {
@@ -59,4 +59,4 @@ const findAllCourses = async () => {
   return courses;
 };
 
-export { processCourseCreation, findAllCourses };
+export { findAllCourses, processCourseCreation };

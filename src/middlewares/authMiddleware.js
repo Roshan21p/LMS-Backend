@@ -45,4 +45,20 @@ const isLoggedIn = async (req, res, next) => {
   }
 };
 
-export default isLoggedIn;
+const authorizeRoles =
+  (...roles) =>
+  async (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: 'You are not authorised for this action',
+        error: {
+          statusCode: 403,
+          reason: 'Unauthorised user for this action'
+        }
+      });
+    }
+    next();
+  };
+
+export { isLoggedIn, authorizeRoles };
