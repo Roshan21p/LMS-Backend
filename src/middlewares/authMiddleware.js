@@ -21,8 +21,6 @@ const isLoggedIn = async (req, res, next) => {
 
     next();
   } catch (error) {
-    // console.log(error);
-
     if (error.name === 'TokenExpiredError') {
       res.cookie('authToken', '', {
         httpOnly: true,
@@ -61,4 +59,4 @@ const authorizeRoles =
     next();
   };
 
-export { isLoggedIn, authorizeRoles };
+export { authorizeRoles, isLoggedIn };

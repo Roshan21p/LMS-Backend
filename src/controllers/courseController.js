@@ -1,4 +1,5 @@
 import {
+  addLectureToCourse,
   findAllCourses,
   processCourseCreation
 } from '../services/courseService.js';
@@ -39,4 +40,21 @@ const getAllCourses = async (req, res) => {
   }
 };
 
-export { createCourse, getAllCourses };
+const addLectureToCourseById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await addLectureToCourse(req.body, req.file, id);
+    return res
+      .status(200)
+      .json(successResponse(response, 'Course lecture added successfully'));
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json(customErrorResponse(error));
+    }
+    console.log('con', error);
+
+    return res.status(500).json(InternalServerError(error));
+  }
+};
+
+export { addLectureToCourseById, createCourse, getAllCourses };

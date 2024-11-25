@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import {
+  addLectureToCourseById,
   createCourse,
   getAllCourses
 } from '../controllers/courseController.js';
@@ -18,5 +19,14 @@ courseRouter
     createCourse
   )
   .get(getAllCourses);
+
+courseRouter
+  .route('/:id')
+  .post(
+    isLoggedIn,
+    authorizeRoles('ADMIN'),
+    upload.single('lecture'),
+    addLectureToCourseById
+  );
 
 export default courseRouter;

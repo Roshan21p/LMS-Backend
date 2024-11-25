@@ -81,7 +81,7 @@ const registerUser = async (userDetails, image) => {
 const getUserProfile = async (userId) => {
   const response = await getUserProfileById(userId);
   if (!response) {
-    throw new NotFoundError('User profile details');
+    throw new NotFoundError('Not able to find user profile details');
   }
   return response;
 };

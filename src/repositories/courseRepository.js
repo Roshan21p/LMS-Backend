@@ -18,4 +18,14 @@ const saveCourse = async (courseData) => {
   }
 };
 
-export { saveCourse };
+const updateCourseWithLectureId = async (courseId) => {
+  try {
+    const response = await Course.findById(courseId);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw new InternalServerError();
+  }
+};
+
+export { saveCourse, updateCourseWithLectureId };
