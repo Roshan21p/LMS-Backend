@@ -1,4 +1,7 @@
-import { processCourseCreation } from '../services/courseService.js';
+import {
+  findAllCourses,
+  processCourseCreation
+} from '../services/courseService.js';
 import AppError from '../utils/appError.js';
 import customErrorResponse from '../utils/customErrorResponse.js';
 import InternalServerError from '../utils/internalServerError.js';
@@ -20,4 +23,20 @@ const createCourse = async (req, res) => {
   }
 };
 
-export { createCourse };
+const getAllCourses = async (req, res) => {
+  try {
+    const response = await findAllCourses();
+
+    return res
+      .status(201)
+      .json(successResponse(response, 'Courses fetched successfully'));
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json(customErrorResponse(error));
+    }
+
+    return res.status(500).json(InternalServerError(error));
+  }
+};
+
+export { createCourse, getAllCourses };

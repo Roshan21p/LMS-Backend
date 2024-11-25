@@ -5,6 +5,8 @@ import path from 'path';
 import { saveCourse } from '../repositories/courseRepository.js';
 import BadRequestError from '../utils/badRequestError.js';
 import InternalServerError from '../utils/internalServerError.js';
+import Course from '../models/courseModel.js';
+import NotFoundError from '../utils/notFoundError.js';
 
 const processCourseCreation = async (courseData, image) => {
   const course = await saveCourse({
@@ -47,4 +49,14 @@ const processCourseCreation = async (courseData, image) => {
   return course;
 };
 
-export { processCourseCreation };
+const findAllCourses = async () => {
+  const courses = Course.find({}).select('-lectures');
+
+  if (!courses) {
+    NotFoundError('any courses');
+  }
+
+  return courses;
+};
+
+export { processCourseCreation, findAllCourses };
