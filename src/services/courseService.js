@@ -1,7 +1,7 @@
-import cloudinary from 'cloudinary';
 import fs from 'fs/promises';
 import path from 'path';
 
+import cloudinary from '../config/cloudinaryConfig.js';
 import Course from '../models/courseModel.js';
 import {
   findCourseAndUpdate,
@@ -27,7 +27,7 @@ const processCourseCreation = async (courseData, image) => {
   if (image) {
     try {
       const result = await cloudinary.v2.uploader.upload(image?.path, {
-        folder: 'lms'
+        folder: 'lms/courses'
       });
 
       if (result) {
@@ -83,7 +83,7 @@ const addLectureToCourse = async (lectureDetails, lectureVideo, courseId) => {
   if (lectureVideo) {
     try {
       const result = await cloudinary.v2.uploader.upload(lectureVideo?.path, {
-        folder: 'lms',
+        folder: 'lms/courses',
         chunk_size: 52428800, // 50 mb size
         resource_type: 'video'
       });
@@ -220,4 +220,5 @@ export {
   findAllCourses,
   listOfLecturesByCourseId,
   processCourseCreation,
-  updateCourse};
+  updateCourse
+};

@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
-import cloudinary from 'cloudinary';
 import crypto from 'crypto';
 import fs from 'fs/promises';
 
+import cloudinary from '../config/cloudinaryConfig.js';
 import User from '../models/userModel.js';
 import {
   checkTokenPassword,
@@ -24,7 +24,7 @@ const registerUser = async (userDetails, image) => {
       const cloudinaryResponse = await cloudinary.v2.uploader.upload(
         imagePath?.path,
         {
-          folder: 'lms', // Save files in a folder named lms
+          folder: 'lms/users', // Save files in a folder named lms
           width: 250,
           height: 250,
           gravity: 'faces', // This option tells cloudinary to center the image around detected faces (if any) after cropping or resizing the original image
@@ -36,6 +36,7 @@ const registerUser = async (userDetails, image) => {
         var public_id = cloudinaryResponse.public_id;
         var secure_url = cloudinaryResponse.secure_url;
 
+        console.log('cloudinary', cloudinaryResponse);
         // Remove file from server
         await fs.rm(`uploads/${imagePath.filename}`);
       }
@@ -196,7 +197,7 @@ const updateUserProfile = async (userDetails) => {
       const cloudinaryResponse = await cloudinary.v2.uploader.upload(
         imagePath?.path,
         {
-          folder: 'lms',
+          folder: 'lms/users',
           width: 250,
           height: 250,
           gravity: 'faces',

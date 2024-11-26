@@ -1,0 +1,43 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
+const DB_URL = process.env.DB_URL;
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRY = process.env.JWT_EXPIRY;
+
+const COOKIE_SECURE = process.env.COOKIE_SECURE;
+
+const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
+const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
+
+const SMTP_HOST = process.env.SMTP_HOST;
+const SMTP_PORT = process.env.SMTP_PORT;
+const SMTP_USERNAME = process.env.SMTP_USERNAME;
+const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
+const SMTP_FROM_EMAIL = process.env.SMTP_FROM_EMAIL;
+
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
+const RAZORPAY_SECRET = process.env.RAZORPAY_SECRET;
+const RAZORPAY_PLAN_ID = process.env.RAZORPAY_PLAN_ID;
+
+export {
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
+  CLOUDINARY_CLOUD_NAME,
+  COOKIE_SECURE,
+  DB_URL,
+  JWT_EXPIRY,
+  JWT_SECRET,
+  PORT,
+  RAZORPAY_KEY_ID,
+  RAZORPAY_PLAN_ID,
+  RAZORPAY_SECRET,
+  SMTP_FROM_EMAIL,
+  SMTP_HOST,
+  SMTP_PASSWORD,
+  SMTP_PORT,
+  SMTP_USERNAME
+};

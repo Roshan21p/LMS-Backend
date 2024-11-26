@@ -1,3 +1,4 @@
+import { COOKIE_SECURE } from '../config/serverConfig.js';
 import loginUser from '../services/authService.js';
 
 const login = async (req, res) => {
@@ -6,7 +7,7 @@ const login = async (req, res) => {
 
     res.cookie('authToken', response.token, {
       httpOnly: true,
-      secure: process.env.COOKIE_SECURE,
+      secure: COOKIE_SECURE,
       sameSite: 'None',
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
@@ -33,7 +34,7 @@ const login = async (req, res) => {
 const logout = (req, res) => {
   res.cookie('authToken', '', {
     httpOnly: true,
-    secure: process.env.COOKIE_SECURE,
+    secure: COOKIE_SECURE,
     sameSite: 'None',
     maxAge: Date.now() + 24 * 60 * 60 * 1000
   });

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 
+import { COOKIE_SECURE, JWT_SECRET } from '../config/serverConfig.js';
 import UnAuthorisedError from '../utils/unauthorisedError.js';
 
 const isLoggedIn = async (req, res, next) => {
@@ -10,7 +11,7 @@ const isLoggedIn = async (req, res, next) => {
   }
 
   try {
-    const decoded = await jwt.verify(authToken, process.env.JWT_SECRET);
+    const decoded = await jwt.verify(authToken, JWT_SECRET);
 
     if (!decoded) {
       throw new UnAuthorisedError();
@@ -24,7 +25,7 @@ const isLoggedIn = async (req, res, next) => {
     if (error.name === 'TokenExpiredError') {
       res.cookie('authToken', '', {
         httpOnly: true,
-        secure: process.env.COOKIE_SECURE,
+        secure: COOKIE_SECURE,
         sameSite: 'None',
         expires: new Date(0)
       });

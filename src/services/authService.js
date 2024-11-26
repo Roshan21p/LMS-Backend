@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+import { JWT_EXPIRY, JWT_SECRET } from '../config/serverConfig.js';
 import { findUser } from '../repositories/userRepository.js';
 import NotFoundError from '../utils/notFoundError.js';
 import UnAuthorisedError from '../utils/unauthorisedError.js';
@@ -13,7 +14,7 @@ const loginUser = async (payloadDetails) => {
   const user = await findUser({ email });
 
   if (!user) {
-    throw new NotFoundError('user with the given email');
+    throw new NotFoundError('Not able to find user with the given email');
   }
 
   //2. If the user is found we need to compare plainIncomingPassword with hashedPassword
@@ -31,9 +32,9 @@ const loginUser = async (payloadDetails) => {
   //3. If the password is validated, create a token and return it
   const token = jwt.sign(
     { id: user._id, role: userRole, subscription: user.subscription },
-    process.env.JWT_SECRET,
+    JWT_SECRET,
     {
-      expiresIn: process.env.JWT_EXPIRY
+      expiresIn: JWT_EXPIRY
     }
   );
 

@@ -1,9 +1,11 @@
 import mongoose from 'mongoose';
+
+import { DB_URL } from './serverConfig.js';
 mongoose.set('strictQuery', false);
 
 const connectDB = async () => {
   try {
-    const connect = await mongoose.connect(process.env.DB_URL);
+    const connect = await mongoose.connect(DB_URL);
 
     console.log(`Connected to MongDB: ${connect.connection.host}`);
   } catch (error) {

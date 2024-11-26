@@ -127,4 +127,5 @@ export {
   getLecturesByCourseId,
   removeCourseById,
   removeLectureFromCourse,
-  updateCourseById};
+  updateCourseById
+};
