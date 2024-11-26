@@ -26,17 +26,17 @@ const isLoggedIn = async (req, res, next) => {
         httpOnly: true,
         secure: process.env.COOKIE_SECURE,
         sameSite: 'None',
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+        expires: new Date(0)
       });
 
       res.status(200).json({
         success: true,
-        message: 'Log out Successfully'
+        message: 'Token has expired. Please log in again.'
       });
     }
 
     return res.status(401).json({
-      succes: false,
+      success: false,
       error: error,
       message: 'Invalid Token provided'
     });

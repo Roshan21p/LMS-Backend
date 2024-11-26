@@ -4,7 +4,8 @@ import {
   addLectureToCourseById,
   createCourse,
   getAllCourses,
-  getLecturesByCourseId
+  getLecturesByCourseId,
+  updateCourseById
 } from '../controllers/courseController.js';
 import { authorizeRoles, isLoggedIn } from '../middlewares/authMiddleware.js';
 import upload from '../middlewares/multerMiddleware.js';
@@ -29,6 +30,7 @@ courseRouter
     authorizeRoles('ADMIN'),
     upload.single('lecture'),
     addLectureToCourseById
-  );
+  )
+  .put(isLoggedIn, authorizeRoles('ADMIN'), updateCourseById);
 
 export default courseRouter;

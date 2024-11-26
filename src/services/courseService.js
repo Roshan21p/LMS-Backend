@@ -4,6 +4,7 @@ import path from 'path';
 
 import Course from '../models/courseModel.js';
 import {
+  findCourseAndUpdate,
   findCourseWithCourseId,
   saveCourse
 } from '../repositories/courseRepository.js';
@@ -123,9 +124,20 @@ const listOfLecturesByCourseId = async (courseId) => {
   return course.lectures;
 };
 
+const updateCourse = async (courseData, courseId) => {
+  const course = await findCourseAndUpdate(courseData, courseId);
+
+  if (!course) {
+    throw new NotFoundError('Invalid course id or course not found.');
+  }
+
+  return course;
+};
+
 export {
   addLectureToCourse,
   findAllCourses,
+  listOfLecturesByCourseId,
   processCourseCreation,
-  listOfLecturesByCourseId
+  updateCourse
 };

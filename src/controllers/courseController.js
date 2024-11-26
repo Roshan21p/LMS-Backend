@@ -2,7 +2,8 @@ import {
   addLectureToCourse,
   findAllCourses,
   listOfLecturesByCourseId,
-  processCourseCreation
+  processCourseCreation,
+  updateCourse
 } from '../services/courseService.js';
 import AppError from '../utils/appError.js';
 import customErrorResponse from '../utils/customErrorResponse.js';
@@ -61,6 +62,7 @@ const addLectureToCourseById = async (req, res) => {
 const getLecturesByCourseId = async (req, res) => {
   try {
     const { id } = req.params;
+
     const response = await listOfLecturesByCourseId(id);
     return res
       .status(200)
@@ -69,8 +71,21 @@ const getLecturesByCourseId = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    console.log('con', error);
+    return res.status(500).json(InternalServerError(error));
+  }
+};
 
+const updateCourseById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await updateCourse(req.body, id);
+    return res
+      .status(200)
+      .json(successResponse(response, 'Course updated successfully'));
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json(customErrorResponse(error));
+    }
     return res.status(500).json(InternalServerError(error));
   }
 };
@@ -79,5 +94,6 @@ export {
   addLectureToCourseById,
   createCourse,
   getAllCourses,
-  getLecturesByCourseId
+  getLecturesByCourseId,
+  updateCourseById
 };

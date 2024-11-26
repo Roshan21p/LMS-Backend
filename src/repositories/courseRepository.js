@@ -24,8 +24,33 @@ const findCourseWithCourseId = async (courseId) => {
     return response;
   } catch (error) {
     console.log(error);
+    throw new InternalServerError(error.message);
+  }
+};
+
+const findCourseAndUpdate = async (courseData, courseId) => {
+  try {
+    const response = await Course.findByIdAndUpdate(
+      courseId,
+      {
+        $set: courseData
+      },
+      {
+        runValidators: true,
+        new: true
+      }
+    );
+    return response;
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const errorMessageList = Object.keys(error.errors).map((property) => {
+        return error.errors[property].message;
+      });
+      console.log(errorMessageList);
+      throw new BadRequestError(errorMessageList);
+    }
     throw new InternalServerError();
   }
 };
 
-export { saveCourse, findCourseWithCourseId };
+export { findCourseAndUpdate, findCourseWithCourseId, saveCourse };
