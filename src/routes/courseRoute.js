@@ -5,6 +5,7 @@ import {
   createCourse,
   getAllCourses,
   getLecturesByCourseId,
+  removeLectureFromCourse,
   updateCourseById
 } from '../controllers/courseController.js';
 import { authorizeRoles, isLoggedIn } from '../middlewares/authMiddleware.js';
@@ -20,7 +21,8 @@ courseRouter
     upload.single('thumbnail'),
     createCourse
   )
-  .get(getAllCourses);
+  .get(getAllCourses)
+  .delete(isLoggedIn, authorizeRoles('ADMIN'), removeLectureFromCourse);
 
 courseRouter
   .route('/:id')

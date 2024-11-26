@@ -33,13 +33,13 @@ const isLoggedIn = async (req, res, next) => {
         success: true,
         message: 'Token has expired. Please log in again.'
       });
+    } else {
+      return res.status(401).json({
+        success: false,
+        error: error,
+        message: 'Invalid Token provided'
+      });
     }
-
-    return res.status(401).json({
-      success: false,
-      error: error,
-      message: 'Invalid Token provided'
-    });
   }
 };
 

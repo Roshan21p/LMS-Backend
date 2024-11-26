@@ -24,7 +24,7 @@ const findCourseWithCourseId = async (courseId) => {
     return response;
   } catch (error) {
     console.log(error);
-    throw new InternalServerError(error.message);
+    throw new InternalServerError(error);
   }
 };
 

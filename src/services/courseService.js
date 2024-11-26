@@ -134,8 +134,56 @@ const updateCourse = async (courseData, courseId) => {
   return course;
 };
 
+const deleteLectureByCourseId = async (courseDetails) => {
+  const { courseId, lectureId } = courseDetails;
+
+  if (!courseId) {
+    throw new BadRequestError('Course ID is required');
+  }
+
+  if (!lectureId) {
+    throw new BadRequestError('lecture ID is required');
+  }
+
+  const course = await findCourseWithCourseId(courseId);
+
+  if (!course) {
+    throw new NotFoundError('Invalid course Id or Course does not exist.');
+  }
+
+  // If course exist then find the index of the lecture using the lectureId
+  const lectureIndex = course.lectures.findIndex(
+    (lecture) => lecture._id.toString() === lectureId.toString()
+  );
+
+  // If lectureIndex is -1 then send error message
+  if (lectureIndex === -1) {
+    throw new NotFoundError('Lecture does not exist.');
+  }
+
+  // Delete the lecture from cloudinary
+  await cloudinary.v2.uploader.destroy(
+    course.lectures[lectureIndex].lecture.public_id,
+    {
+      resource_type: 'video'
+    }
+  );
+
+  // Remove the lecture from the array
+  course.lectures.splice(lectureIndex, 1);
+
+  // update the number of lectures based on lectures array length
+  course.numberOfLectures = course.lectures.length;
+
+  // Save the course object
+  await course.save();
+
+  return course;
+};
+
 export {
   addLectureToCourse,
+  deleteLectureByCourseId,
   findAllCourses,
   listOfLecturesByCourseId,
   processCourseCreation,
