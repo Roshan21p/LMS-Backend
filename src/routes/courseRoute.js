@@ -5,6 +5,7 @@ import {
   createCourse,
   getAllCourses,
   getLecturesByCourseId,
+  removeCourseById,
   removeLectureFromCourse,
   updateCourseById
 } from '../controllers/courseController.js';
@@ -33,6 +34,7 @@ courseRouter
     upload.single('lecture'),
     addLectureToCourseById
   )
-  .put(isLoggedIn, authorizeRoles('ADMIN'), updateCourseById);
+  .put(isLoggedIn, authorizeRoles('ADMIN'), updateCourseById)
+  .delete(isLoggedIn, authorizeRoles('ADMIN'), removeCourseById);
 
 export default courseRouter;

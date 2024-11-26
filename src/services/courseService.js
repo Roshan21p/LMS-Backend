@@ -181,11 +181,43 @@ const deleteLectureByCourseId = async (courseDetails) => {
   return course;
 };
 
+const deleteCourse = async (courseId) => {
+  const course = await findCourseWithCourseId(courseId);
+
+  if (!course) {
+    throw new NotFoundError('Invalid course id or course not found.');
+  }
+
+  try {
+    // Delete the course thumbnail from Cloudinary
+    if (course.thumbnail?.public_id) {
+      await cloudinary.v2.uploader.destroy(course.thumbnail.public_id);
+    }
+
+    if (course.lectures && course.lectures.length > 0) {
+      for (const lecture of course.lectures) {
+        if (lecture?.lecture?.public_id) {
+          await cloudinary.v2.uploader.destroy(lecture.lecture.public_id, {
+            resource_type: 'video'
+          });
+        }
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    throw new InternalServerError('Failed to delete course assets');
+  }
+
+  await course.deleteOne();
+
+  return course;
+};
+
 export {
   addLectureToCourse,
+  deleteCourse,
   deleteLectureByCourseId,
   findAllCourses,
   listOfLecturesByCourseId,
   processCourseCreation,
-  updateCourse
-};
+  updateCourse};

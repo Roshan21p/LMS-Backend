@@ -1,5 +1,6 @@
 import {
   addLectureToCourse,
+  deleteCourse,
   deleteLectureByCourseId,
   findAllCourses,
   listOfLecturesByCourseId,
@@ -104,11 +105,26 @@ const removeLectureFromCourse = async (req, res) => {
     return res.status(500).json(InternalServerError(error));
   }
 };
+
+const removeCourseById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await deleteCourse(id);
+    return res
+      .status(200)
+      .json(successResponse(response, 'Course removed successfully'));
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json(customErrorResponse(error));
+    }
+    return res.status(500).json(InternalServerError(error));
+  }
+};
 export {
   addLectureToCourseById,
   createCourse,
   getAllCourses,
   getLecturesByCourseId,
+  removeCourseById,
   removeLectureFromCourse,
-  updateCourseById
-};
+  updateCourseById};
