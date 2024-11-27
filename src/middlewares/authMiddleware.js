@@ -60,4 +60,21 @@ const authorizeRoles =
     next();
   };
 
-export { authorizeRoles, isLoggedIn };
+// Middleware to check if user has an active subscription or not
+const authorizeSubscribers = async (req, res, next) => {
+  // If user is not admin or does not have an active subscription then error else pass
+  if (req.user.role !== 'ADMIN' && req.user.subscription.status !== 'active') {
+    return res.status(403).json({
+      success: false,
+      message: 'Please subscribe to access this route',
+      error: {
+        statusCode: 403,
+        reason: 'Unauthorised Admin for this action'
+      }
+    });
+  }
+
+  next();
+};
+
+export { authorizeRoles, authorizeSubscribers, isLoggedIn };

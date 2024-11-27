@@ -4,6 +4,7 @@ import razorpay from '../config/razorpayConfig.js';
 import { RAZORPAY_PLAN_ID, RAZORPAY_SECRET } from '../config/serverConfig.js';
 import Payment from '../models/paymentModel.js';
 import { findUserById } from '../repositories/userRepository.js';
+import AppError from '../utils/appError.js';
 import BadRequestError from '../utils/badRequestError.js';
 import InternalServerError from '../utils/internalServerError.js';
 import UnAuthorisedError from '../utils/unauthorisedError.js';
@@ -149,4 +150,74 @@ const findAllPaymentsRecord = async (payloadDetails) => {
     monthlySalesRecord
   };
 };
-export { checkSubscriptionStatus, findAllPaymentsRecord, purchaseSubscription };
+
+const processCancelSubscription = async (userId) => {
+  const user = await findUserById(userId);
+
+  if (!user) {
+    throw new UnAuthorisedError();
+  }
+
+  if (user.role === 'ADMIN') {
+    throw new BadRequestError('Admin cannot cancel subscription');
+  }
+
+  const subscription_id = user.subscription.id;
+
+  // Creating a subscription using razorpay that we imported from the razorpayConfig
+  try {
+    const subscription = await razorpay.subscriptions.cancel(
+      subscription_id // subscription id
+    );
+
+    // Adding the subscription status to the user account
+    user.subscription.status = subscription.status;
+
+    // Saving the user object
+    await user.save();
+  } catch (error) {
+    // Returning error if any, and this error is from razorpay so we have statusCode and message built in
+    const statusCode = error.statusCode || 500;
+    throw new AppError(error, statusCode);
+  }
+
+  // Finding the payment using the subscription ID
+  const payment = await Payment.findOne({
+    razorpay_subscription_id: subscription_id
+  });
+
+  // Getting the time from the date of successful payment (in milliseconds)
+  const timeSinceSubscribed = Date.now() - payment.createdAt;
+
+  // refund period which in our case is 14 days
+  const refundPeriod = 14 * 24 * 60 * 60 * 1000;
+
+  if (refundPeriod <= timeSinceSubscribed) {
+    throw new BadRequestError(
+      'Refund period is over, so there will not be any refumds provided.'
+    );
+  }
+
+  try {
+    // Process the refund via Razorpay
+    await razorpay.payments.refund(payment.razorpay_payment_id, {
+      speed: 'optimum' // This is required
+    });
+  } catch (error) {
+    // Handle Razorpay errors during the refund process
+    const statusCode = error.statusCode || 500;
+    throw new AppError(error, statusCode);
+  }
+
+  user.subscription.id = undefined; // Remove the subscription ID from user DB
+  user.subscription.status = undefined; // Change the subscription Status in user DB
+
+  await user.save();
+  await payment.deleteOne();
+};
+export {
+  checkSubscriptionStatus,
+  findAllPaymentsRecord,
+  processCancelSubscription,
+  purchaseSubscription
+};

@@ -12,7 +12,7 @@ class BadRequestError extends AppError {
     invalidParams.forEach((params) => (message += `${params}\n`));
 
     super(
-      `The request has the following invalid parameters \n ${invalidParams}`,
+      `The request has the following invalid parameters: ${invalidParams}`,
       400
     );
   }
