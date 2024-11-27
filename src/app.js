@@ -2,8 +2,10 @@ import dotenv from 'dotenv';
 import express from 'express';
 dotenv.config();
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import morgan from 'morgan';
 
+import { FRONTEND_URL } from './config/serverConfig.js';
 import authRouter from './routes/authRoute.js';
 import courseRouter from './routes/courseRoute.js';
 import miscRouter from './routes/miscellaneousRoute.js';
@@ -15,6 +17,14 @@ const app = express();
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
+
+// Third-Party
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true
+  })
+);
 
 app.use(morgan('dev'));
 

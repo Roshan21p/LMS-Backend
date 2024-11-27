@@ -1,4 +1,5 @@
 import { CONTACT_US_EMAIL } from '../config/serverConfig.js';
+import User from '../models/userModel.js';
 import BadRequestError from '../utils/badRequestError.js';
 import InternalServerError from '../utils/internalServerError.js';
 import sendEmail from '../utils/sendEmail.js';
@@ -23,4 +24,20 @@ const getContactInfo = async (contactDetails) => {
   }
 };
 
-export { getContactInfo };
+const getUserStats = async () => {
+  try {
+    const allUserCount = await User.countDocuments();
+
+    const subscribedUsersCount = await User.countDocuments({
+      'subscription.status': 'active' // subscription.status means we are going inside an object and we have to put this in quotes
+    });
+    return {
+      allUserCount,
+      subscribedUsersCount
+    };
+  } catch (error) {
+    throw new InternalServerError(error);
+  }
+};
+
+export { getContactInfo, getUserStats };

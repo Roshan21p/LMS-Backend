@@ -23,6 +23,8 @@ const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
 const RAZORPAY_SECRET = process.env.RAZORPAY_SECRET;
 const RAZORPAY_PLAN_ID = process.env.RAZORPAY_PLAN_ID;
 
+const FRONTEND_URL = process.env.FRONTEND_URL;
+
 const CONTACT_US_EMAIL = process.env.CONTACT_US_EMAIL;
 
 export {
@@ -32,6 +34,7 @@ export {
   CONTACT_US_EMAIL,
   COOKIE_SECURE,
   DB_URL,
+  FRONTEND_URL,
   JWT_EXPIRY,
   JWT_SECRET,
   PORT,
