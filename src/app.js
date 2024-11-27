@@ -6,6 +6,7 @@ import morgan from 'morgan';
 
 import authRouter from './routes/authRoute.js';
 import courseRouter from './routes/courseRoute.js';
+import miscRouter from './routes/miscellaneousRoute.js';
 import paymentRouter from './routes/paymentRoute.js';
 import userRouter from './routes/userRoute.js';
 
@@ -24,6 +25,7 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/courses', courseRouter);
 app.use('/api/v1/payments', paymentRouter);
+app.use('/api/v1', miscRouter);
 
 app.use('/ping', function (req, res) {
   res.send('Pong');

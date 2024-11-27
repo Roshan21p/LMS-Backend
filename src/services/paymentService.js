@@ -122,7 +122,7 @@ const findAllPaymentsRecord = async (payloadDetails) => {
   };
 
   const monthlyWisePayments = allPayments.items
-    .filter((payment) => payment.status === 'active' && payment.start_at)
+    .filter((payment) => payment.status !== 'null' && payment.start_at)
     .map((payment) => {
       // We are using payment.start_at which is in unix time, so we are converting it to Human readable format using Date()
       const monthsInNumbers = new Date(payment.start_at * 1000);
