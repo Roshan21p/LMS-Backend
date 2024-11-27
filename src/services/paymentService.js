@@ -1,10 +1,12 @@
+import crypto from 'crypto';
+
 import razorpay from '../config/razorpayConfig.js';
 import { RAZORPAY_PLAN_ID, RAZORPAY_SECRET } from '../config/serverConfig.js';
 import Payment from '../models/paymentModel.js';
 import { findUserById } from '../repositories/userRepository.js';
 import BadRequestError from '../utils/badRequestError.js';
+import InternalServerError from '../utils/internalServerError.js';
 import UnAuthorisedError from '../utils/unauthorisedError.js';
-import crypto from 'crypto';
 
 const purchaseSubscription = async (userId) => {
   const user = await findUserById(userId);
@@ -73,4 +75,78 @@ const checkSubscriptionStatus = async (payloadDetails, userId) => {
   await user.save();
 };
 
-export { purchaseSubscription, checkSubscriptionStatus };
+const findAllPaymentsRecord = async (payloadDetails) => {
+  const { count, skip } = payloadDetails;
+
+  let allPayments;
+  try {
+    allPayments = await razorpay.subscriptions.all({
+      count: count ? count : 10, // If count is sent then use that else default to 10
+      skip: skip ? skip : 0 // If skip is sent then use that else default to 0
+    });
+  } catch (error) {
+    throw new InternalServerError(error.message);
+  }
+
+  // Initialize Month Data
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
+
+  // finalMonths store the count of payments for each month, initialized to 0
+  const finalMonths = {
+    January: 0,
+    February: 0,
+    March: 0,
+    April: 0,
+    May: 0,
+    June: 0,
+    July: 0,
+    August: 0,
+    September: 0,
+    October: 0,
+    November: 0,
+    December: 0
+  };
+
+  const monthlyWisePayments = allPayments.items
+    .filter((payment) => payment.status === 'active' && payment.start_at)
+    .map((payment) => {
+      // We are using payment.start_at which is in unix time, so we are converting it to Human readable format using Date()
+      const monthsInNumbers = new Date(payment.start_at * 1000);
+
+      return monthNames[monthsInNumbers.getMonth()];
+    });
+
+  monthlyWisePayments.map((month) => {
+    Object.keys(finalMonths).forEach((objMonth) => {
+      if (month === objMonth) {
+        finalMonths[month] += 1;
+      }
+    });
+  });
+
+  const monthlySalesRecord = [];
+
+  Object.keys(finalMonths).forEach((monthName) => {
+    monthlySalesRecord.push(finalMonths[monthName]);
+  });
+
+  return {
+    allPayments,
+    finalMonths,
+    monthlySalesRecord
+  };
+};
+export { checkSubscriptionStatus, findAllPaymentsRecord, purchaseSubscription };
