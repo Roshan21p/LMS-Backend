@@ -24,7 +24,7 @@ const createCourse = async (req, res) => {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
 
-    return res.status(500).json(InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error));
   }
 };
 
@@ -40,7 +40,7 @@ const getAllCourses = async (req, res) => {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
 
-    return res.status(500).json(InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error));
   }
 };
 
@@ -57,7 +57,7 @@ const addLectureToCourseById = async (req, res) => {
     }
     console.log('con', error);
 
-    return res.status(500).json(InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error));
   }
 };
 
@@ -73,7 +73,7 @@ const getLecturesByCourseId = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error));
   }
 };
 
@@ -88,7 +88,7 @@ const updateCourseById = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error));
   }
 };
 
@@ -102,7 +102,7 @@ const removeLectureFromCourse = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error));
   }
 };
 
@@ -117,7 +117,7 @@ const removeCourseById = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error));
   }
 };
 export {
