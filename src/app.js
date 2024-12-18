@@ -13,11 +13,6 @@ import paymentRouter from './routes/paymentRoute.js';
 import userRouter from './routes/userRoute.js';
 
 const app = express();
-
-app.use(express.json());
-app.use(express.text());
-app.use(express.urlencoded({ extended: true }));
-
 // Third-Party
 app.use(
   cors({
@@ -25,6 +20,12 @@ app.use(
     credentials: true
   })
 );
+
+app.use(express.json());
+app.use(express.text());
+app.use(express.urlencoded({ extended: true }));
+
+
 
 app.use(morgan('dev'));
 

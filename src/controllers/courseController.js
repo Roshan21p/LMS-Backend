@@ -24,7 +24,7 @@ const createCourse = async (req, res) => {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
 
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -33,14 +33,13 @@ const getAllCourses = async (req, res) => {
     const response = await findAllCourses();
 
     return res
-      .status(201)
+      .status(200)
       .json(successResponse(response, 'Courses fetched successfully'));
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -57,7 +56,7 @@ const addLectureToCourseById = async (req, res) => {
     }
     console.log('con', error);
 
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -73,14 +72,15 @@ const getLecturesByCourseId = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
 const updateCourseById = async (req, res) => {
+  
   try {
     const { id } = req.params;
-    const response = await updateCourse(req.body, id);
+    const response = await updateCourse(req.body, id , req.file);
     return res
       .status(200)
       .json(successResponse(response, 'Course updated successfully'));
@@ -88,7 +88,7 @@ const updateCourseById = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -102,7 +102,7 @@ const removeLectureFromCourse = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -115,9 +115,9 @@ const removeCourseById = async (req, res) => {
       .json(successResponse(response, 'Course removed successfully'));
   } catch (error) {
     if (error instanceof AppError) {
-      return res.status(error.statusCode).json(customErrorResponse(error));
+      return res.status(error.statusCode).json(customErrorResponse(error.message));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 export {

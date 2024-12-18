@@ -11,7 +11,8 @@ const courseSchema = new Schema(
     },
     description: {
       type: String,
-      required: [true, 'Description is required']
+      required: [true, 'Description is required'],
+      minlength: [5, 'Description must be atleast 5 characters'],
     },
     category: {
       type: String,

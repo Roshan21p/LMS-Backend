@@ -22,7 +22,7 @@ const register = async (req, res) => {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
 
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -36,8 +36,7 @@ const getProfile = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -55,7 +54,7 @@ const forgotPassword = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -73,8 +72,7 @@ const resetPassword = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -90,8 +88,7 @@ const changePassword = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -106,7 +103,7 @@ const updateProfile = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 

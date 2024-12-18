@@ -2,12 +2,17 @@ import jwt from 'jsonwebtoken';
 
 import { COOKIE_SECURE, JWT_SECRET } from '../config/serverConfig.js';
 import UnAuthorisedError from '../utils/unauthorisedError.js';
+import User from '../models/userModel.js';
 
 const isLoggedIn = async (req, res, next) => {
-  const { authToken } = req.cookies;
-
+  
+  const { authToken } = req.cookies;  
+  
   if (!authToken) {
-    return next(new UnAuthorisedError('No auth token is provided'));
+    return res.status(401).json({
+      success: false,
+      message: 'No auth token provided. Please log in again.',
+    });
   }
 
   try {
@@ -34,7 +39,8 @@ const isLoggedIn = async (req, res, next) => {
         success: true,
         message: 'Token has expired. Please log in again.'
       });
-    } else {
+    } 
+    else {
       return res.status(401).json({
         success: false,
         error: error,
@@ -63,13 +69,15 @@ const authorizeRoles =
 // Middleware to check if user has an active subscription or not
 const authorizeSubscribers = async (req, res, next) => {
   // If user is not admin or does not have an active subscription then error else pass
-  if (req.user.role !== 'ADMIN' && req.user.subscription.status !== 'active') {
+  const user = await User.findById(req.user.id)
+  
+  if (user.role !== 'ADMIN' && user.subscription.status !== 'active') {
     return res.status(403).json({
       success: false,
       message: 'Please subscribe to access this route',
       error: {
         statusCode: 403,
-        reason: 'Unauthorised Admin for this action'
+        reason: 'Subscription required for premium access'
       }
     });
   }

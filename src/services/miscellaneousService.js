@@ -20,7 +20,7 @@ const getContactInfo = async (contactDetails) => {
     // Await the send email
     await sendEmail(CONTACT_US_EMAIL, subject, textMessage);
   } catch (error) {
-    throw new InternalServerError(error);
+    throw new InternalServerError(error.message);
   }
 };
 
@@ -36,7 +36,7 @@ const getUserStats = async () => {
       subscribedUsersCount
     };
   } catch (error) {
-    throw new InternalServerError(error);
+    throw new InternalServerError(error.message);
   }
 };
 

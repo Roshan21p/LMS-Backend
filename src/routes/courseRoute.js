@@ -34,7 +34,7 @@ courseRouter
     upload.single('lecture'),
     addLectureToCourseById
   )
-  .put(isLoggedIn, authorizeRoles('ADMIN'), updateCourseById)
+  .put(isLoggedIn, authorizeRoles('ADMIN'), upload.single('thumbnail'), updateCourseById)
   .delete(isLoggedIn, authorizeRoles('ADMIN'), removeCourseById);
 
 export default courseRouter;

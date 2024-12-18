@@ -38,14 +38,13 @@ const loginUser = async (payloadDetails) => {
     }
   );
 
-  return {
+  user.password = undefined;
+ if(user.avatar){
+  user.avatar.public_id = undefined;
+ }  
+  return{
     token,
-    userRole,
-    userData: {
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName
-    }
+    user
   };
 };
 

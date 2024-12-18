@@ -20,6 +20,10 @@ const purchaseSubscription = async (userId) => {
     throw new BadRequestError('Admin cannot purchase a subscription');
   }
 
+  if(user?.subscription?.status === 'active'){
+    throw new BadRequestError('You are already subscribed.');
+  }
+
   // Creating a subscription using razorpay that we imported from the razorpayConfig
   const subscription = await razorpay.subscriptions.create({
     plan_id: RAZORPAY_PLAN_ID, // The unique plan ID
@@ -77,15 +81,28 @@ const checkSubscriptionStatus = async (payloadDetails, userId) => {
 };
 
 const findAllPaymentsRecord = async (payloadDetails) => {
-  const { count, skip } = payloadDetails;
+  const { count } = payloadDetails;
 
-  let allPayments;
+  let allPayments = []; // Store all the fetched payments here.
+  let fetchedCount = 0; // Count of fetched payments so far.
+  const limit = 100; // Razorpay allows a maximum of 100 records per request.
   try {
-    allPayments = await razorpay.subscriptions.all({
-      count: count ? count : 10, // If count is sent then use that else default to 10
-      skip: skip ? skip : 0 // If skip is sent then use that else default to 0
-    });
+    while(true){
+     const response = await razorpay.subscriptions.all({
+        count: Math.min(count - fetchedCount,limit),  // Remaining records to fetch or 100 max
+        skip: fetchedCount, //Skip already fetched records
+      });
+
+      allPayments = allPayments.concat(response.items); // Append fetched items to the array.
+      fetchedCount += response.items.length; // Update the count of fetched items.
+
+      if(!response.items.length || fetchedCount >= (count || response.count)){
+        break;
+      }
+    }
+  
   } catch (error) {
+    console.log(error);
     throw new InternalServerError(error.message);
   }
 
@@ -121,11 +138,12 @@ const findAllPaymentsRecord = async (payloadDetails) => {
     December: 0
   };
 
-  const monthlyWisePayments = allPayments.items
+  const monthlyWisePayments = allPayments
     .filter((payment) => payment.status !== 'null' && payment.start_at)
     .map((payment) => {
       // We are using payment.start_at which is in unix time, so we are converting it to Human readable format using Date()
       const monthsInNumbers = new Date(payment.start_at * 1000);
+      
 
       return monthNames[monthsInNumbers.getMonth()];
     });
@@ -176,6 +194,7 @@ const processCancelSubscription = async (userId) => {
     // Saving the user object
     await user.save();
   } catch (error) {
+    
     // Returning error if any, and this error is from razorpay so we have statusCode and message built in
     const statusCode = error.statusCode || 500;
     throw new AppError(error, statusCode);
@@ -209,11 +228,13 @@ const processCancelSubscription = async (userId) => {
     throw new AppError(error, statusCode);
   }
 
+  
   user.subscription.id = undefined; // Remove the subscription ID from user DB
   user.subscription.status = undefined; // Change the subscription Status in user DB
 
   await user.save();
   await payment.deleteOne();
+  
 };
 export {
   checkSubscriptionStatus,

@@ -17,7 +17,7 @@ const contactUs = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -33,7 +33,7 @@ const userStats = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 

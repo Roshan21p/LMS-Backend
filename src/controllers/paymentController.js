@@ -29,7 +29,7 @@ const buySubscription = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -44,7 +44,7 @@ const verifySubscription = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -53,14 +53,16 @@ const getAllPayments = async (req, res) => {
     const response = await findAllPaymentsRecord(req.query);
     return res.status(200).json({
       success: true,
-      message: 'Payment verified successfully',
+      message: 'All Payments fectched successfully',
       data: response
     });
   } catch (error) {
+    console.log(error);
+    
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 
@@ -75,7 +77,7 @@ const cancelSubscription = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
-    return res.status(500).json(new InternalServerError(error));
+    return res.status(500).json(new InternalServerError(error.message));
   }
 };
 

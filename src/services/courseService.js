@@ -54,12 +54,11 @@ const processCourseCreation = async (courseData, image) => {
 };
 
 const findAllCourses = async () => {
-  const courses = Course.find({}).select('-lectures');
+  const courses = Course.find().select('-lectures');
 
   if (!courses) {
     NotFoundError('Not able to find courses');
   }
-
   return courses;
 };
 
@@ -121,15 +120,53 @@ const listOfLecturesByCourseId = async (courseId) => {
     throw new NotFoundError('Invalid course id or course not found.');
   }
 
+
   return course.lectures;
 };
 
-const updateCourse = async (courseData, courseId) => {
+const updateCourse = async (courseData, courseId, image) => {
+  
   const course = await findCourseAndUpdate(courseData, courseId);
 
   if (!course) {
     throw new NotFoundError('Invalid course id or course not found.');
   }
+
+  if (image) {
+    try {
+       // Ensure `thumbnail` is an object before updating
+       if(course.thumbnail === null){
+        course.thumbnail = {}; // Initialize as an empty object
+       }
+
+      if(course?.thumbnail?.public_id) {        
+        await cloudinary.v2.uploader.destroy(course?.thumbnail?.public_id);
+      }
+
+      const result = await cloudinary.v2.uploader.upload(image?.path, {
+        folder: 'lms/courses'
+      });
+
+
+      if (result) {
+        course.thumbnail.public_id = result.public_id;
+        course.thumbnail.secure_url = result.secure_url;
+      }
+   
+
+      // After successful upload remove the file from local storage
+      fs.rm(`uploads/${image.filename}`);
+    } catch (error) {
+      console.log(error);
+      // Empty the uploads directory without deleting the uploads directory
+      for (const file of await fs.readdir('uploads/')) {
+        await fs.unlink(path.join('uploads/', file));
+      }
+      throw new InternalServerError('Image is not uploaded, please try again');
+    }
+  }
+
+  course.save();
 
   return course;
 };

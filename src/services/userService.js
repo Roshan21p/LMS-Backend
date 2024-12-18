@@ -16,6 +16,7 @@ import BadRequestError from '../utils/badRequestError.js';
 import InternalServerError from '../utils/internalServerError.js';
 import NotFoundError from '../utils/notFoundError.js';
 import sendEmail from '../utils/sendEmail.js';
+import UnAuthorisedError from '../utils/unauthorisedError.js';
 
 const registerUser = async (userDetails, image) => {
   const imagePath = image;
@@ -162,7 +163,7 @@ const setPassword = async (userDetails, userId) => {
   const isPasswordValided = await bcrypt.compare(oldPassword, user.password);
 
   if (!isPasswordValided) {
-    throw new BadRequestError('Old password is inavlid');
+    throw new UnAuthorisedError('Old password is inavlid');
   }
 
   user.password = newPassword;
@@ -189,8 +190,8 @@ const updateUserProfile = async (userDetails) => {
 
   if (userDetails.file) {
     try {
-      // Deletes the old image uploaded by the user
-      await cloudinary.v2.uploader.destroy(user.avatar?.public_id);
+      // Deletes the old image uploaded by the user 
+      if(user?.avatar) await cloudinary.v2.uploader.destroy(user?.avatar?.public_id);
 
       const imagePath = userDetails.file;
 

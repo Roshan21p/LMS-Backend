@@ -24,11 +24,11 @@ const findCourseWithCourseId = async (courseId) => {
     return response;
   } catch (error) {
     console.log(error);
-    throw new InternalServerError(error);
+    throw new InternalServerError();
   }
 };
 
-const findCourseAndUpdate = async (courseData, courseId) => {
+const findCourseAndUpdate = async (courseData, courseId) => {  
   try {
     const response = await Course.findByIdAndUpdate(
       courseId,
