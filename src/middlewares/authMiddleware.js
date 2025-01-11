@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 
 import { COOKIE_SECURE, JWT_SECRET } from '../config/serverConfig.js';
-import UnAuthorisedError from '../utils/unauthorisedError.js';
 import User from '../models/userModel.js';
+import UnAuthorisedError from '../utils/unauthorisedError.js';
 
 const isLoggedIn = async (req, res, next) => {
   

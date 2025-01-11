@@ -102,7 +102,7 @@ const getForgotPassword = async (email) => {
   // Generating the reset token via the method we have in user model
   const resetToken = await user.generatePasswordResetToken();
 
-  const resetPasswordUrl = `${process.env.FRONTEND_URL}/resetPassword/${resetToken}`;
+  const resetPasswordUrl = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
 
   const subject = 'Reset Password';
   const message = `You can reset your password by clicking <a href=${resetPasswordUrl} target="_blank">Reset your password</a>\nIf the above link does not work for some reason then copy paste this link in new tab ${resetPasswordUrl}.\n If you have not requested this, kindly ignore.`;
@@ -188,10 +188,12 @@ const updateUserProfile = async (userDetails) => {
     user.lastName = lastName;
   }
 
-  if (userDetails.file) {
+  if (userDetails?.file) {
     try {
       // Deletes the old image uploaded by the user 
-      if(user?.avatar) await cloudinary.v2.uploader.destroy(user?.avatar?.public_id);
+      if(user?.avatar?.public_id){        
+        await cloudinary.v2.uploader.destroy(user?.avatar?.public_id);
+      }
 
       const imagePath = userDetails.file;
 
@@ -207,8 +209,8 @@ const updateUserProfile = async (userDetails) => {
       );
 
       if (cloudinaryResponse) {
-        user.avatar.public_id = cloudinaryResponse.public_id;
-        user.avatar.secure_url = cloudinaryResponse.secure_url;
+        user.avatar.public_id = cloudinaryResponse?.public_id;
+        user.avatar.secure_url = cloudinaryResponse?.secure_url;
 
         // Remove file from server
         await fs.rm(`uploads/${imagePath.filename}`);
