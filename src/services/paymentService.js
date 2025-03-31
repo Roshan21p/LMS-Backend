@@ -61,8 +61,12 @@ const checkSubscriptionStatus = async (payloadDetails, userId) => {
     .update(`${razorpay_payment_id}|${subscription_id}`)
     .digest('hex');
 
+    console.log("generatedSignature",generatedSignature);
+    
   // Check if generated signature and signature received from the frontend is the same or not
   if (generatedSignature !== razorpay_signature) {
+    console.log("generatedSignature true");
+    
     throw new BadRequestError('Payment not verified, please try again.');
   }
 
@@ -170,40 +174,42 @@ const findAllPaymentsRecord = async (payloadDetails) => {
 };
 
 const processCancelSubscription = async (userId) => {
-  const user = await findUserById(userId);
-
-  if (!user) {
-    throw new UnAuthorisedError();
-  }
-
-  if (user.role === 'ADMIN') {
-    throw new BadRequestError('Admin cannot cancel subscription');
-  }
-
-  const subscription_id = user.subscription.id;
-
-  // Creating a subscription using razorpay that we imported from the razorpayConfig
   try {
-    const subscription = await razorpay.subscriptions.cancel(
-      subscription_id // subscription id
-    );
+    const user = await findUserById(userId);
 
-    // Adding the subscription status to the user account
-    user.subscription.status = subscription.status;
-
-    // Saving the user object
-    await user.save();
-  } catch (error) {
+    console.log("user", user);
     
-    // Returning error if any, and this error is from razorpay so we have statusCode and message built in
-    const statusCode = error.statusCode || 500;
-    throw new AppError(error, statusCode);
-  }
 
-  // Finding the payment using the subscription ID
+    if (!user) {
+      throw new UnAuthorisedError();
+    }
+  
+    if (user.role === 'ADMIN') {
+      throw new BadRequestError('Admin cannot cancel subscription');
+    }
+  
+    const subscription_id = user.subscription.id;
+
+      // Creating a subscription using razorpay that we imported from the razorpayConfig
+      const subscription = await razorpay.subscriptions.cancel(
+        subscription_id // subscription id
+      );
+
+      console.log("Razorpay subscription cancel", subscription);
+    
+
+      // Adding the subscription status to the user account
+      user.subscription.status = subscription.status;
+  
+      // Saving the user object
+      await user.save();
+
+      // Finding the payment using the subscription ID
   const payment = await Payment.findOne({
     razorpay_subscription_id: subscription_id
   });
+
+  console.log("payment", payment);
 
   // Getting the time from the date of successful payment (in milliseconds)
   const timeSinceSubscribed = Date.now() - payment.createdAt;
@@ -217,16 +223,10 @@ const processCancelSubscription = async (userId) => {
     );
   }
 
-  try {
-    // Process the refund via Razorpay
-    await razorpay.payments.refund(payment.razorpay_payment_id, {
-      speed: 'optimum' // This is required
-    });
-  } catch (error) {
-    // Handle Razorpay errors during the refund process
-    const statusCode = error.statusCode || 500;
-    throw new AppError(error, statusCode);
-  }
+   // Process the refund via Razorpay
+   await razorpay.payments.refund(payment.razorpay_payment_id, {
+    speed: 'optimum' // This is required
+  });
 
   
   user.subscription.id = undefined; // Remove the subscription ID from user DB
@@ -234,7 +234,13 @@ const processCancelSubscription = async (userId) => {
 
   await user.save();
   await payment.deleteOne();
+
   
+  } catch (error) {
+      // Handle Razorpay errors during the refund process
+      const statusCode = error.statusCode || 500;
+      throw new AppError(error, statusCode);
+  }
 };
 export {
   checkSubscriptionStatus,

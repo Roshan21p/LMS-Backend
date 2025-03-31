@@ -74,6 +74,7 @@ const cancelSubscription = async (req, res) => {
       message: 'Subscription canceled successfully'
     });
   } catch (error) {
+    console.log("subscription", error);
     if (error instanceof AppError) {
       return res.status(error.statusCode).json(customErrorResponse(error));
     }
