@@ -1,0 +1,925 @@
+{
+	"info": {
+		"_postman_id": "11e3f278-ae45-46f4-a413-f4a02e15b76a",
+		"name": "LMS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29685576"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstName",
+									"value": "Roshan",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Prajapati",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "roshan1@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/C:/Users/Roshan/Downloads/UserProfile.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "Roshan Prajapati",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "roshan1@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "Roshan Prajapati",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "roshan@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "Roshan Prajapati",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "abc@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user Profile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "Roshan Prajapati",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "abc@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/getProfile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"getProfile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "Roshan Prajapati",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "abc@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/forgotPassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"forgotPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "Roshan Prajapati",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "abc@gmail.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/resetPassword/9c71eccbc203b7fb8efc4b700f95f71432909eb8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"resetPassword",
+								"9c71eccbc203b7fb8efc4b700f95f71432909eb8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstName",
+									"value": "Roshan",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Prajapati",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/C:/Users/Roshan/Downloads/UserProfile.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/updateProfile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"updateProfile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "Roshan Prajapati",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "abc@gmail.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "oldPassword",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "newPassword",
+									"value": "12345678",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/changePassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"changePassword"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Courses",
+			"item": [
+				{
+					"name": "create Course",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Programming Course",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Best course",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Java development",
+									"type": "text"
+								},
+								{
+									"key": "createdBy",
+									"value": "Roshan",
+									"type": "text"
+								},
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/Users/Roshan/Downloads/UserProfile.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/courses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all courses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/courses",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add lectures by CourseId",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "basic java",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "what is java ? How its work",
+									"type": "text"
+								},
+								{
+									"key": "lecture",
+									"type": "file",
+									"src": "/C:/Users/Roshan/Downloads/html video.mp4"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/courses/67474319579fe4e34d9fff8b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								"67474319579fe4e34d9fff8b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get lectures by CourseId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/courses/6745dd4bd110cf85d110855f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								"6745dd4bd110cf85d110855f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update course by id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/Users/Roshan/Downloads/Login.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/courses/674c344f1fdbb8cfbe808de6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								"674c344f1fdbb8cfbe808de6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete lecture from course",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/courses?courseId=6745dd4bd110cf85d110855f&lectureId=6745e321c9213797677ab614",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses"
+							],
+							"query": [
+								{
+									"key": "courseId",
+									"value": "6745dd4bd110cf85d110855f"
+								},
+								{
+									"key": "lectureId",
+									"value": "6745e321c9213797677ab614"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete course by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/courses/6745e3c4c9213797677ab61c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"courses",
+								"6745e3c4c9213797677ab61c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "getRazorpayApiKey",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/payments/razorpay-key",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"razorpay-key"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "subscribe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/payments/subscribe",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"subscribe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify subscription",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "razorpay_payment_id",
+									"value": "pay_PQNvYiXZNamC0f",
+									"type": "text"
+								},
+								{
+									"key": "razorpay_subscription_id",
+									"value": "sub_PQNsKMtKyMPfpr",
+									"type": "text"
+								},
+								{
+									"key": "razorpay_signature",
+									"value": "a3903f613dcc6573a23d14ccedb126640fa8b66b69448e1c5908dfba13f36832",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/payments/verify",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get All Payments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "razorpay_payment_id",
+									"value": "pay_PQD6kKSNRWySJn",
+									"type": "text"
+								},
+								{
+									"key": "razorpay_subscription_id",
+									"value": "sub_PQCnRRs4mxxZ4r",
+									"type": "text"
+								},
+								{
+									"key": "razorpay_signature",
+									"value": "signature",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/payments?count=5&skip=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"payments"
+							],
+							"query": [
+								{
+									"key": "count",
+									"value": "5"
+								},
+								{
+									"key": "skip",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel subscription",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "razorpay_payment_id",
+									"value": "pay_PQD6kKSNRWySJn",
+									"type": "text"
+								},
+								{
+									"key": "razorpay_subscription_id",
+									"value": "sub_PQCnRRs4mxxZ4r",
+									"type": "text"
+								},
+								{
+									"key": "razorpay_signature",
+									"value": "signature",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/payments/unsubscribe",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"unsubscribe"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Miscellaneous",
+			"item": [
+				{
+					"name": "ContactUs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Roshan",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "roshan1@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "message",
+									"value": "Best App",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://lms-backend-wwa3.onrender.com/api/v1/contact",
+							"protocol": "https",
+							"host": [
+								"lms-backend-wwa3",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"contact"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get User Stats",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Roshan",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "roshan1@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "message",
+									"value": "Best App",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/admin/stats/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"stats",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
